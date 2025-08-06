@@ -15,6 +15,7 @@ import MessagingPanel from './components/MessagingPanel';
 import NotFound from './components/NotFound';
 import Unauthorized from './components/Unauthorized';
 import { UserProvider, useUser } from './context/UserContext';
+import { CartProvider } from './context/CartContext';
 import './App.css';
 import ProductBrowser from './components/dashboards/ProductBrowser';
 
@@ -74,9 +75,11 @@ function AppContent() {
 function App() {
   return (
     <UserProvider>
-      <Router>
-        <AppContent />
-      </Router>
+      <CartProvider>
+        <Router>
+          <AppContent />
+        </Router>
+      </CartProvider>
     </UserProvider>
   );
 }

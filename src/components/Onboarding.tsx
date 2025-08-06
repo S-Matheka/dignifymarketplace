@@ -18,12 +18,12 @@ const Onboarding: React.FC = () => {
     paymentMethods: []
   });
 
-  // Only show payment step for buyer or donor
+  // Only show payment step for buyer (not donor)
   const steps = [
     { number: 1, title: 'Choose Role', component: UserTypeSelection },
     { number: 2, title: 'Personal Info', component: RegistrationForm },
     { number: 3, title: 'Location', component: LocationSetup },
-    ...(onboardingData.userType === 'buyer' || onboardingData.userType === 'donor'
+    ...(onboardingData.userType === 'buyer'
       ? [{ number: 4, title: 'Payment', component: PaymentSetup }]
       : [])
   ];

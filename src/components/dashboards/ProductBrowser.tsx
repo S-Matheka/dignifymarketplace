@@ -1,14 +1,42 @@
 import React, { useState } from 'react';
 import { useUser } from '../../context/UserContext';
 import { useNavigate } from 'react-router-dom';
-import { Droplets, Sun, Heart, Sparkles, Package, HeartPulse, ShoppingCart, UserPlus } from 'lucide-react';
+import { Droplets, Sun, Heart, Sparkles, Package, HeartPulse, ShoppingCart, UserPlus, Shield, Flame } from 'lucide-react';
+
+const categories = [
+  { key: 'Water', label: 'Water', icon: <Droplets className="w-6 h-6 text-blue-500" /> },
+  { key: 'Sanitation', label: 'Sanitation', icon: <Shield className="w-6 h-6 text-green-500" /> },
+  { key: 'Hygiene', label: 'Hygiene', icon: <Sparkles className="w-6 h-6 text-yellow-500" /> },
+  { key: 'Energy', label: 'Energy', icon: <Flame className="w-6 h-6 text-orange-500" /> },
+];
+
+const featuredKits = [
+  {
+    id: 'kit1',
+    name: 'Family Hygiene Kit',
+    description: 'Complete hygiene kit for a family of 5, including soap, ...',
+    price: 2200,
+    oldPrice: 2500,
+    discount: 12,
+    badge: 'Kit',
+  },
+  {
+    id: 'kit2',
+    name: 'School WASH Package',
+    description: 'WASH essentials for schools, supporting up to 50 students.',
+    price: 8500,
+    oldPrice: null,
+    discount: null,
+    badge: 'Kit',
+  },
+];
 
 const ProductBrowser: React.FC = () => {
   const { user } = useUser();
   const navigate = useNavigate();
   const [selectedCategory, setSelectedCategory] = useState('all');
+  const [search, setSearch] = useState('');
 
-  // If user is not authenticated, show login/create account prompt
   if (!user) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -45,160 +73,70 @@ const ProductBrowser: React.FC = () => {
     );
   }
 
-  const mockProducts = [
-    {
-      id: 1,
-      name: 'Water Filter System',
-      description: 'High-quality water filtration for clean drinking water',
-      price: 2500,
-      category: 'Water',
-      stock: 15,
-      icon: Droplets
-    },
-    {
-      id: 2,
-      name: 'Solar Lamp',
-      description: 'Portable solar-powered LED lamp for lighting',
-      price: 1500,
-      category: 'Energy',
-      stock: 25,
-      icon: Sun
-    },
-    {
-      id: 3,
-      name: 'Sanitary Pads (Pack)',
-      description: 'Pack of 10 sanitary pads for menstrual hygiene',
-      price: 300,
-      category: 'Hygiene',
-      stock: 50,
-      icon: Heart
-    },
-    {
-      id: 4,
-      name: 'Soap Bar',
-      description: 'Natural soap bar for personal hygiene',
-      price: 100,
-      category: 'Hygiene',
-      stock: 100,
-      icon: Sparkles
-    },
-    {
-      id: 5,
-      name: 'First Aid Kit',
-      description: 'Basic first aid supplies for emergencies',
-      price: 800,
-      category: 'Health',
-      stock: 20,
-      icon: HeartPulse
-    },
-    {
-      id: 6,
-      name: 'Water Storage Container',
-      description: '20L water storage container with tap',
-      price: 1200,
-      category: 'Water',
-      stock: 30,
-      icon: Package
-    }
-  ];
-
-  const categories = ['all', 'Water', 'Energy', 'Hygiene', 'Health'];
-
-  const filteredProducts = selectedCategory === 'all' 
-    ? mockProducts 
-    : mockProducts.filter(product => product.category === selectedCategory);
-
-  const addToCart = (product: any) => {
-    // Mock add to cart functionality
-    alert(`Added ${product.name} to cart!`);
-  };
-
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900">Browse Products</h1>
-            <p className="text-gray-600">Find essential products for your community</p>
-          </div>
-          <button 
-            onClick={() => navigate('/buyer')}
-            className="btn-secondary"
-          >
-            Back to Dashboard
+      <div className="max-w-xl mx-auto px-4 py-6">
+        <h1 className="text-2xl font-bold text-gray-900 mb-1">Good Afternoon, John</h1>
+        <p className="text-gray-600 mb-1">Find WASH products for your needs</p>
+        <a href="#" className="text-blue-600 text-sm mb-4 block">Browse and purchase WASH products for your needs</a>
+        <div className="flex gap-2 mb-4">
+          <button className="flex-1 flex items-center justify-center gap-2 bg-blue-50 text-blue-700 font-semibold rounded-full py-2 px-4">
+            <ShoppingCart className="w-5 h-5" /> View Cart
+          </button>
+          <button className="flex-1 flex items-center justify-center gap-2 bg-green-50 text-green-700 font-semibold rounded-full py-2 px-4">
+            <Heart className="w-5 h-5" /> Wishlist
           </button>
         </div>
-
-        {/* Category Filter */}
-        <div className="mb-8">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Filter by Category</h2>
-          <div className="flex flex-wrap gap-3">
-            {categories.map(category => (
-              <button
-                key={category}
-                onClick={() => setSelectedCategory(category)}
-                className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                  selectedCategory === category
-                    ? 'bg-purple-600 text-white'
-                    : 'bg-white text-gray-700 hover:bg-gray-100 border border-gray-200'
-                }`}
-              >
-                {category === 'all' ? 'All Categories' : category}
-              </button>
-            ))}
+        <div className="mb-6">
+          <div className="rounded-xl bg-gray-100 flex items-center px-4 py-3">
+            <svg className="w-5 h-5 text-gray-400 mr-2" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" /></svg>
+            <input
+              type="text"
+              className="bg-transparent outline-none flex-1 text-base"
+              placeholder="Search products..."
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+            />
           </div>
         </div>
-
-        {/* Products Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {filteredProducts.map(product => {
-            const IconComponent = product.icon;
-            return (
-              <div key={product.id} className="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow">
-                <div className="relative">
-                  <div className="aspect-square bg-gradient-to-br from-purple-50 to-purple-100 flex items-center justify-center">
-                    <IconComponent className="w-24 h-24 text-purple-600" />
-                  </div>
-                  {product.stock === 0 && (
-                    <div className="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded-full text-xs font-medium">
-                      Out of Stock
-                    </div>
-                  )}
-                </div>
-                <div className="p-6">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">{product.name}</h3>
-                  <p className="text-gray-600 text-sm mb-4">{product.description}</p>
-                  <div className="flex items-center justify-between">
-                    <span className="text-2xl font-bold text-purple-600">KES {product.price}</span>
-                    <button
-                      onClick={() => addToCart(product)}
-                      disabled={product.stock === 0}
-                      className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                        product.stock === 0
-                          ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                          : 'bg-purple-600 text-white hover:bg-purple-700'
-                      }`}
-                    >
-                      {product.stock === 0 ? 'Out of Stock' : 'Add to Cart'}
-                    </button>
-                  </div>
-                  <p className="text-sm text-gray-500 mt-2">
-                    {product.stock} units available
-                  </p>
-                </div>
+        <h2 className="text-lg font-bold mb-2">Categories</h2>
+        <div className="flex gap-3 mb-6 overflow-x-auto pb-2">
+          {categories.map(cat => (
+            <button
+              key={cat.key}
+              onClick={() => setSelectedCategory(cat.key)}
+              className={`flex flex-col items-center rounded-xl px-4 py-3 min-w-[80px] border transition-all ${selectedCategory === cat.key ? 'bg-blue-50 border-blue-400' : 'bg-white border-gray-200'}`}
+            >
+              {cat.icon}
+              <span className="text-xs font-semibold mt-2 text-gray-700">{cat.label}</span>
+            </button>
+          ))}
+        </div>
+        <h2 className="text-lg font-bold mb-2">Featured Kits</h2>
+        <div className="flex flex-col gap-4">
+          {featuredKits.map(kit => (
+            <div key={kit.id} className="bg-white rounded-2xl shadow p-4 flex flex-col gap-2">
+              <div className="flex items-center gap-2 mb-1">
+                {kit.discount && (
+                  <span className="bg-red-500 text-white text-xs font-bold rounded px-2 py-1">{kit.discount}% OFF</span>
+                )}
+                {kit.badge && (
+                  <span className="bg-blue-100 text-blue-700 text-xs font-bold rounded px-2 py-1 flex items-center gap-1">
+                    <Package className="w-4 h-4" /> {kit.badge}
+                  </span>
+                )}
               </div>
-            );
-          })}
+              <div className="font-bold text-base mb-1">{kit.name}</div>
+              <div className="text-gray-600 text-sm mb-1">{kit.description}</div>
+              <div className="flex items-end gap-2">
+                <span className="text-lg font-bold text-gray-900">KSh {kit.price.toLocaleString()}</span>
+                {kit.oldPrice && (
+                  <span className="text-gray-400 line-through text-base">KSh {kit.oldPrice.toLocaleString()}</span>
+                )}
+              </div>
+            </div>
+          ))}
         </div>
-
-        {filteredProducts.length === 0 && (
-          <div className="text-center py-12">
-            <Package className="mx-auto h-12 w-12 text-gray-400" />
-            <h3 className="mt-2 text-sm font-medium text-gray-900">No products found</h3>
-            <p className="mt-1 text-sm text-gray-500">No products match the selected category.</p>
-          </div>
-        )}
       </div>
     </div>
   );
